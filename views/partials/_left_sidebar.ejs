@@ -1,0 +1,43 @@
+<div class="col-md-3">
+    <div class="card post-card mb-4 z-0">
+        <div class="card-body z-0">
+            <% if (typeof user !== 'undefined' && user) { %>
+                <div class="d-flex align-items-center mb-3">
+                    <img width="64" height="64" src="<%= user.profilePicture || '/images/default_profile.svg' %>" class="rounded-circle me-3" alt="Profile">
+                    <div>
+                        <h5 class="mb-0"><%= user.fullName ? user.fullName : user.username %></h5>
+                        <small class="text-muted">@<%= user.username %></small>
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <a href="/me" class="btn btn-outline-primary">
+                        <i class="bi bi-person"></i> View Profile
+                    </a>
+                </div>
+            <% } else { %>
+                <div class="text-center">
+                    <h6 class="mb-3">Join the conversation!</h6>
+                    <div class="d-grid gap-2">
+                        <a href="/login" class="btn btn-outline-primary">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </a>
+                        <a href="/register" class="btn btn-primary">
+                            <i class="bi bi-person-plus"></i> Sign Up
+                        </a>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    <div class="card post-card z-0">
+        <div class="card-body">
+            <h6 class="card-title">Trending Topics</h6>
+            <div class="d-flex flex-column gap-2">
+                <a href="#" class="text-decoration-none">#webdev</a>
+                <a href="#" class="text-decoration-none">#javascript</a>
+                <a href="#" class="text-decoration-none">#coding</a>
+                <a href="#" class="text-decoration-none">#technology</a>
+            </div>
+        </div>
+    </div>
+</div>

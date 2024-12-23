@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<%- include("partials/_head") %>
+<body>
+    <div class="container mt-4">
+        <%- include("partials/_nav") %>
+        
+        <div class="row">
+            <!-- Left Sidebar -->
+            <%- include("partials/_left_sidebar") %>
+
+            <!-- Main Content -->
+            <div class="col-md-6">
+                <!-- Create Post -->
+                <div class="card post-card mb-4 z-0">
+                    <div class="card-body">
+                        <form action="/post" method="POST" id="postForm" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <textarea name="content" class="form-control" rows="3" placeholder="What's on your mind?"></textarea>
+                            </div>
+                            <div id="imagePreviewContainer" class="mb-3 d-flex flex-wrap gap-2">
+                                <!-- Image previews will be inserted here -->
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <label for="imageInput" class="btn btn-outline-primary btn-sm me-2">
+                                        <i class="bi bi-image"></i>
+                                    </label>
+                                    <input type="file" id="imageInput" name="images" multiple accept="image/*" class="d-none">
+                                    <button type="button" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-emoji-smile"></i>
+                                    </button>
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="submitPost">
+                                    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                    <span class="button-text">Post</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Posts Feed -->
+                <%- include("partials/_posts-feed", { posts: posts, sanitize: sanitize }) %>
+
+            </div>
+
+            <!-- Right Sidebar -->
+            <%- include("partials/_right_sidebar") %>
+
+        </div>
+    </div>
+
+    <script src="/js/feed.js" defer></script>
+</body>
+</html> 

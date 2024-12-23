@@ -1,0 +1,24 @@
+{
+  "name": "jexpress",
+  "version": "0.0.0",
+  "private": true,
+  "main": "app.js",
+  "description": "A simple Express.js app",
+  "scripts": {
+    "dev": "nodemon --ext *"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cloudinary": "^2.5.1",
+    "connect-livereload": "^0.6.1",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^5.0.1",
+    "express-fileupload": "^1.5.1",
+    "jsonwebtoken": "^9.0.2",
+    "livereload": "^0.9.3",
+    "mongoose": "^8.9.2",
+    "sanitize-html": "^2.14.0"
+  }
+}

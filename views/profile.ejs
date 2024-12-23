@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<%- include("partials/_head") %>
+<body>
+    <div class="container mt-4">
+        <%- include("partials/_nav") %>
+
+        <div class="row">
+            <!-- Left Sidebar -->
+            <%- include("partials/_left_sidebar") %>
+
+            <!-- Main content content -->
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="card post-card z-0">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-4">
+                                <img width="128" src="<%= viewingUser?.profilePicture || '/images/default_profile.svg' %>" 
+                                    class="rounded-circle me-4" 
+                                    style="width: 128px; height: 128px; object-fit: cover;" 
+                                    alt="Profile Picture">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h2 class="mb-1"><%= viewingUser?.fullName || viewingUser?.username %></h2>
+                                            <p class="text-muted mb-2">@<%= viewingUser?.username %></p>
+                                        </div>
+
+                                        <% if (user?.isFollowing) { %>
+                                            <button class="btn btn-primary" id="follow-user-btn" data-user-id="<%= viewingUser._id %>" data-is-following="<%= user?.isFollowing ? true : false %>">
+                                                <i class="bi bi-person-dash"></i> Unfollow
+                                            </button>
+                                        <% } else { %>
+                                            <button class="btn btn-outline-primary" id="follow-user-btn" data-user-id="<%= viewingUser._id %>" data-is-following="<%= user?.isFollowing ? true : false %>">
+                                                <i class="bi bi-person-plus"></i> Follow
+                                            </button>
+                                        <% } %>
+
+    
+                                    </div>
+                                    <p class="mb-2"><%= viewingUser?.bio || 'No bio added yet.' %></p>
+                                    <div class="d-flex gap-3">
+                                        <% if (viewingUser?.location) { %>
+                                            <small class="text-muted">
+                                                <i class="bi bi-geo-alt"></i> <%= viewingUser.location %>
+                                            </small>
+                                        <% } %>
+                                        <% if (viewingUser?.dateOfBirth) { %>
+                                            <small class="text-muted">
+                                                <i class="bi bi-calendar"></i> Joined <%= new Date(viewingUser.createdAt).toLocaleDateString() %>
+                                            </small>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-around text-center">
+                                <div>
+                                    <h5 id="followers-count" class="mb-1"><%= viewingUser?.followersCount || 0 %></h5>
+                                    <small class="text-muted">Followers</small>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1"><%= viewingUser?.followingCount || 0 %></h5>
+                                    <small class="text-muted">Following</small>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">0</h5>
+                                    <small class="text-muted">Posts</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                
+    
+                <!-- Profile Tabs -->
+                <div class="row mt-4">
+                    <ul class="nav nav-tabs mb-4" id="profileTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#posts">
+                                <i class="bi bi-grid"></i> Posts
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#about">
+                                <i class="bi bi-person"></i> About
+                            </button>
+                        </li>
+                    </ul>
+    
+                    <div class="tab-content">
+                        <!-- Posts Tab -->
+                        <div class="tab-pane fade show active" id="posts">
+                            <!-- <div class="text-center text-muted py-5">
+                                <i class="bi bi-journal-text display-4 mb-3"></i>
+                                <p>No posts yet</p>
+                            </div> -->
+                            <%- include("partials/_posts-feed", { posts: posts, sanitize: sanitize }) %>
+                        </div>
+    
+                        <!-- About Tab -->
+                        <div class="tab-pane fade" id="about">
+                            <div class="card post-card z-0">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-4">Profile Information</h5>
+                                    <div class="mb-3">
+                                        <h6 class="text-muted mb-2">Account Status</h6>
+                                        <p>
+                                            <span class="badge <%= viewingUser?.isVerified ? 'bg-success' : 'bg-warning' %>">
+                                                <%= viewingUser?.isVerified ? 'Verified' : 'Unverified' %>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <%- include("partials/_right_sidebar") %>
+
+        </div>
+    </div>
+
+    <script src="/js/profile.js" defer></script>
+</body>
+</html>

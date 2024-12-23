@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<%- include("partials/_head") %>
+<body>
+    <div class="container mt-4">
+        <%- include("partials/_nav") %>
+        
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card post-card z-0">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">Edit Profile</h4>
+                        
+                        <form action="/me/edit" method="POST" enctype="multipart/form-data">
+                            <!-- Profile Picture -->
+                            <div class="mb-4 text-center">
+                                <img width="128" id="profile-picture-preview" src="<%= user?.profilePicture || '/images/default_profile.svg' %>" 
+                                    class="rounded-circle mb-3"
+                                    style="width: 128px; height: 128px; object-fit: cover;"
+                                    alt="Profile Picture">
+                                <div>
+                                    <label class="btn btn-outline-primary btn-sm position-relative">
+                                        <i class="bi bi-camera"></i> Change Photo
+                                        <input type="file" name="profilePicture" class="d-none" accept="image/*">
+                                        <div class="upload-spinner position-absolute top-50 start-50 translate-middle d-none">
+                                            <div class="spinner-border spinner-border-sm text-light" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Basic Information -->
+                            <div class="mb-4">
+                                <h5 class="mb-3">Basic Information</h5>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" name="fullName" 
+                                        value="<%= user?.fullName || '' %>" placeholder="Enter your full name">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-control" name="username" 
+                                        value="<%= user?.username %>" readonly>
+                                    <small class="text-muted">Username cannot be changed</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Bio</label>
+                                    <textarea class="form-control" name="bio" rows="3" 
+                                        placeholder="Tell us about yourself"><%= user?.bio || '' %></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Location</label>
+                                    <input type="text" class="form-control" name="location" 
+                                        value="<%= user?.location || '' %>" placeholder="Where are you based?">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" name="dateOfBirth" 
+                                        value="<%= user?.dateOfBirth?.toISOString().split('T')[0] || '' %>">
+                                </div>
+                            </div>
+
+                            <!-- Contact Information -->
+                            <div class="mb-4">
+                                <h5 class="mb-3">Contact Information</h5>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" 
+                                        value="<%= user?.email %>" readonly>
+                                    <small class="text-muted">Email cannot be changed</small>
+                                </div>
+                            </div>
+
+                            <!-- Privacy Settings -->
+                            <div class="mb-4">
+                                <h5 class="mb-3">Privacy Settings</h5>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Profile Visibility</label>
+                                    <select class="form-select" name="profileVisibility">
+                                        <option value="public" 
+                                            <%= user?.privacySettings?.profileVisibility === 'public' ? 'selected' : '' %>>
+                                            Public
+                                        </option>
+                                        <option value="followers" 
+                                            <%= user?.privacySettings?.profileVisibility === 'followers' ? 'selected' : '' %>>
+                                            Followers Only
+                                        </option>
+                                        <option value="private" 
+                                            <%= user?.privacySettings?.profileVisibility === 'private' ? 'selected' : '' %>>
+                                            Private
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary position-relative" id="save-button">
+                                    <span class="button-text">
+                                        <i class="bi bi-check-lg"></i> Save Changes
+                                    </span>
+                                    <div class="button-spinner position-absolute top-50 start-50 translate-middle d-none">
+                                        <div class="spinner-border spinner-border-sm" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </button>
+                                <a href="/me" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-lg"></i> Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/profile_edit.js" defer></script>
+</body>
+</html>

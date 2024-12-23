@@ -1,0 +1,44 @@
+<div class="col-md-3">
+    <div class="card post-card mb-4 z-0">
+        <div class="card-body">
+            <h6 class="card-title mb-3">Who to Follow</h6>
+            <!-- Suggestion 1 -->
+            <div class="d-flex align-items-center mb-3">
+                <img width="40" src="/images/default_profile.svg" class="rounded-circle me-2" alt="User">
+                <div>
+                    <h6 class="mb-0">Tech Expert</h6>
+                    <small class="text-muted">@techexpert</small>
+                </div>
+                <button class="btn btn-sm btn-primary ms-auto">Follow</button>
+            </div>
+            <!-- Suggestion 2 -->
+            <div class="d-flex align-items-center">
+                <img width="40" src="/images/default_profile.svg" class="rounded-circle me-2" alt="User">
+                <div>
+                    <h6 class="mb-0">Code Master</h6>
+                    <small class="text-muted">@codemaster</small>
+                </div>
+                <button class="btn btn-sm btn-primary ms-auto">Follow</button>
+            </div>
+        </div>
+    </div>
+    <div class="card post-card z-0">
+        <div class="card-body">
+            <h6 class="card-title">Recent Activity</h6>
+            <div class="d-flex flex-column gap-3">
+                <% if (typeof user !== 'undefined' && user && user.notifications.length > 0) { %>
+                    <% user.notifications.slice(0, 4).forEach(noti => { %>  
+                        <div class="d-flex align-items-center">
+                            <i class="<%= noti?.icon %> me-2"></i>
+                            <small><%= noti?.title %></small>
+                        </div>  
+                    <% }) %> 
+                <% } else { %>
+                    <div class="d-flex align-items-center">
+                        <p>You have no notifications</p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
