@@ -16,11 +16,10 @@ const { getLanding } = require("./controllers/landingController");
 const { getLoginPage, getRegisterPage } = require("./controllers/loginRegisterController")
 const { createPost, getPostPage } = require("./controllers/postController")
 const { followUser, unfollowUser } = require("./controllers/followController")
+const { getNotificationPage } = require("./controllers/notificationsController")
 
 const { protect } = require("./middleware/auth");
 
-// routes
-// const feedRoutes = require("./routes/feedRoutes");
 
 // Initialize Express app
 const app = express();
@@ -48,8 +47,6 @@ app.use(fileUpload({useTempFiles: true})) // configure it
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-const router = express.Router()
-
 // Routes
 // Home page
 app.get("/", getLanding);
@@ -74,6 +71,7 @@ app.get("/explore", (req, res) => {
 
 // Profile Routes
 app.get("/me", protect, getMe);
+app.get("/notifications", protect, getNotificationPage)
 app.get("/me/edit", protect, profileEdit);
 app.put("/me/edit", protect, updateProfile);
 

@@ -1,5 +1,4 @@
 <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
 <circle cx="249.5" cy="249.5" r="216.5" fill="#607780"/>
-<line x1="164.083" y1="232.866" x2="235.272" y2="314.616" stroke="#9DA9AD" stroke-width="40"/>
-<line x1="358.037" y1="188.167" x2="210.037" y2="315.38" stroke="#9DA9AD" stroke-width="40"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M213.042 277.374L357.182 153L389 190.16L208.393 346L205.209 342.281L204.874 342.574L118 242.427L154.811 210.247L213.042 277.374Z" fill="#C7D3D8"/>
 </svg>

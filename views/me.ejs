@@ -18,7 +18,12 @@
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h2 class="mb-1"><%= user?.fullName || user?.username %></h2>
+                                        <h2 class="mb-1 fw-bold d-flex justify-content-center align-items-center gap-2" style="height: 45px;">
+                                            <%= user?.fullName || user?.username %>
+                                            <% if (user?.isVerified) { %>
+                                                <img src="/images/check-mark.svg" alt="Verified" width="20">
+                                            <% } %>
+                                        </h2>
                                         <p class="text-muted mb-2">@<%= user?.username %></p>
                                     </div>
                                     <a href="/me/edit" class="btn btn-outline-primary">

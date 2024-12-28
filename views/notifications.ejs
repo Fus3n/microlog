@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<%- include("partials/_head") %>
+<body>
+    <div class="container mt-4">
+        <%- include("partials/_nav") %>
+        
+        <div class="row">
+            <!-- Left Sidebar -->
+            <%- include("partials/_left_sidebar") %>
+
+            <div class="col-md-6">
+                <div class="card post-card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Notifications</h5>
+                        <% if (user.notifications.length > 0) { %>
+                            <% user.notifications.forEach(noti => { %>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="<%= noti?.icon %> fs-4 me-3"></i>
+                                    <div>
+                                        <p class="mb-0"><%= noti?.title %></p>
+                                        <small class="text-muted"><%= noti?.timestamp %></small>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <p>You have no notifications.</p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <%- include("partials/_right_sidebar") %>
+
+        </div>
+    </div>
+</body>
+</html>
