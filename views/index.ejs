@@ -1,76 +1,42 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
-<%- include("partials/_head") %>
-<body>
-    <div class="container mt-4">
-        <%- include("partials/_nav") %>
-        
-        <div class="hero-section">
-            <h1 class="display-4 mb-4">Share Your Thoughts with the World</h1>
-            <p class="lead mb-4">Join our community of thinkers, creators, and storytellers.</p>
-            <div class="d-flex justify-content-center gap-3">
-                <a href="/register" class="btn btn-primary btn-lg">Get Started</a>
-                <a href="/explore" class="btn btn-outline-light btn-lg">Explore Feed</a>
-            </div>
-        </div>
+    <%- include("partials/_head") %>
+    <body>
+        <div class="container mt-4">
+            <%- include("partials/_nav") %>
 
-        <div class="row g-4 mb-4">
-            <div class="col-md-4">
-                <div class="feature-card">
-                    <i class="bi bi-lightning-charge display-5 mb-3 text-primary"></i>
-                    <h3>Quick & Easy</h3>
-                    <p>Share your thoughts in seconds with our intuitive interface.</p>
+            <div class="hero-section">
+                <h1 class="display-4 mb-4">Share Your Thoughts with the World</h1>
+                <p class="lead mb-4">Join our community of thinkers, creators, and storytellers.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="/register" class="btn btn-primary btn-lg">Get Started</a>
+                    <a href="/explore" class="btn btn-outline-light btn-lg">Explore Feed</a>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="feature-card">
-                    <i class="bi bi-people display-5 mb-3 text-primary"></i>
-                    <h3>Connect</h3>
-                    <p>Build meaningful connections with like-minded individuals.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="feature-card">
-                    <i class="bi bi-shield-check display-5 mb-3 text-primary"></i>
-                    <h3>Safe & Secure</h3>
-                    <p>Your privacy and security are our top priorities.</p>
-                </div>
-            </div>
-        </div>
 
-        <div class="row mb-4">
-            <div class="col-md-6 offset-md-3">
-                <div class="card post-card">
-                    <div class="card-body">
-                        <h4 class="card-title">Featured Posts</h4>
-                        <div class="mb-3 border-bottom pb-3">
-                            <div class="d-flex align-items-center mb-2">
-                                <img width="40" src="/images/default_profile.svg" class="rounded-circle me-2" alt="User">
-                                <strong>John Doe</strong>
-                                <small class="text-muted ms-auto">2 hours ago</small>
-                            </div>
-                            <p class="mb-2">Just launched my new project! So excited to share it with everyone. #coding #webdev</p>
-                            <div class="d-flex gap-3">
-                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-heart"></i> 24</button>
-                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-chat"></i> 8</button>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="d-flex align-items-center mb-2">
-                                <img width="40" src="/images/default_profile.svg" class="rounded-circle me-2" alt="User">
-                                <strong>Jane Smith</strong>
-                                <small class="text-muted ms-auto">5 hours ago</small>
-                            </div>
-                            <p class="mb-2">Learning new things every day. The journey of continuous improvement never ends! 🚀</p>
-                            <div class="d-flex gap-3">
-                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-heart"></i> 42</button>
-                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-chat"></i> 12</button>
-                            </div>
-                        </div>
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="bi bi-lightning-charge display-5 mb-3 text-primary"></i>
+                        <h3>Quick & Easy</h3>
+                        <p>Share your thoughts in seconds with our intuitive interface.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="bi bi-people display-5 mb-3 text-primary"></i>
+                        <h3>Connect</h3>
+                        <p>Build meaningful connections with like-minded individuals.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 ">
+                    <div class="feature-card">
+                        <i class="bi bi-shield-check display-5 mb-3 text-primary"></i>
+                        <h3>Safe & Secure</h3>
+                        <p>Your privacy and security are our top priorities.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>

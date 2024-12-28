@@ -1,6 +1,6 @@
 # MicroLog - A MicroBlogging Platform
 
-A simple yet feature-rich microblogging platform built with Express.js, designed for users to share their thoughts, connect with others, and explore a community of ideas.
+A simple yet feature-rich (not yet) microblogging platform built with Express.js, designed for users to share their thoughts, connect with others, and explore a community of ideas.
 
 ![Feed Page](previews/feed-page.png)
 
