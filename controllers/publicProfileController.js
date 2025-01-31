@@ -2,7 +2,6 @@ const User = require('../models/User');
 const Post = require('../models/Post');
 const { verifyToken } = require("../controllers/authController");
 const { getUserWithUsername, getPosts } = require("../utils/userUtils");
-const sanitize = require('sanitize-html');
 
 
 const getPublicProfile = async (req, res) => {
@@ -49,7 +48,6 @@ const getPublicProfile = async (req, res) => {
         viewingUser,
         user,
         posts,
-        sanitize,
         isFollowing
     });
 }

@@ -10,11 +10,6 @@ body {
     min-height: 100vh;
 }
 
-.card {
-    position: relative;
-    z-index: 1;
-}
-
 
 .navbar {
     /* backdrop-filter: blur(10px); */

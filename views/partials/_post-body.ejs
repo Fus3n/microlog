@@ -1,0 +1,118 @@
+<%
+    function formatPost(text) {
+        return text
+                .replace(/#(\w+)/g, '<a href="/tag/$1" class="text-decoration-none">#$1</a>')
+                .replace(/\r\n|\r|\n/g, "<br>");
+    }
+%>
+
+<div class="card post-card mb-4">
+    <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+            <img width="40" height="40" src="<%= post.user.profilePicture || '/images/default_profile.svg' %>" class="rounded-circle me-2" alt="User">
+            <div>
+                <h6 class="mb-0"><a href="/profile/<%= post.user.username || 'Anonymous' %>" class="user-link text-reset hover-underline"><%= post.user.username || 'Anonymous' %></a></h6>
+                <small class="text-muted">
+                    <%= new Date(post.createdAt).toLocaleString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true
+                    }) %>
+                </small>
+            </div>
+            <div class="dropdown ms-auto z-3">
+                <button class="btn btn-link" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Save</a></li>
+                    <li><a class="dropdown-item" href="#">Report</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <% if(post.title) { %>
+            <h5 class="card-title"><%= post.title %></h5>
+        <% } %>
+
+        <a href="/post/<%= post._id %>" class="card-text text-reset" style="text-decoration: none;">
+            <p><%- formatPost(post.text) %></p>
+        </a>
+
+        <% if(post.images && post.images.length > 0) { %>
+            <% if(post.images.length === 1) { %>
+                <div style="background-color: #000;">
+                    <img src="<%= post.images[0] %>" 
+                         class="d-block w-100 rounded" 
+                         alt="Post image"
+                         style="object-fit: contain; min-height:500px; max-height: 500px;">
+                </div>
+            <% } else { %>
+                <div id="carousel-<%= post._id %>" class="carousel slide">
+                    <div class="carousel-indicators">
+                        <% post.images.forEach((image, index) => { %>
+                            <button type="button" 
+                                data-bs-target="#carousel-<%= post._id %>" 
+                                data-bs-slide-to="<%= index %>"
+                                class="<%= index === 0 ? 'active' : '' %>"
+                                aria-current="<%= index === 0 ? 'true' : 'false' %>"
+                                aria-label="Slide <%= index + 1 %>"
+                                style="background-color: #0d6efd; width: 30px; height: 3px;">
+                            </button>
+                        <% }) %>
+                    </div>
+
+                    <div class="carousel-inner" style="max-height: 500px; display: flex; align-items: center;">
+                        <% post.images.forEach((image, index) => { %>
+                            <div class="carousel-item <%= index === 0 ? 'active' : '' %>" style="background-color: #000;">
+                                <img src="<%= image %>" 
+                                     class="d-block w-100 rounded" 
+                                     alt="Post image"
+                                     style="object-fit: contain; min-height:500px; max-height: 500px;">
+                            </div>
+                        <% }) %>
+                    </div>
+
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-<%= post._id %>" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(60%) sepia(98%) saturate(1200%) hue-rotate(199deg) brightness(100%) contrast(100%); width: 40px; height: 40px;"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-<%= post._id %>" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(60%) sepia(98%) saturate(1200%) hue-rotate(199deg) brightness(100%) contrast(100%); width: 40px; height: 40px;"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            <% } %>
+        <% } %>
+
+        <% if(post.tags && post.tags.length > 0) { %>
+            <div class="my-3">
+                <% post.tags.forEach(tag => { %>
+                    <a href="/tag/<%= tag %>" class="text-decoration-none me-2">#<%= tag %></a>
+                <% }) %>
+            </div>
+        <% } %>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-3">
+                <button class="btn btn-sm">
+                    <i class="bi bi-heart"></i> <%= post.likesCount %>
+                    <!-- when liked -->
+                    <!-- <i class="bi bi-heart-fill text-danger"></i> <%= post.likesCount %> -->
+                </button>
+                <button class="btn btn-sm">
+                    <i class="bi bi-chat"></i> <%= post.commentsCount %>
+                </button>
+                <button class="btn btn-sm">
+                    <i class="bi bi-share"></i>
+                </button>
+            </div>
+
+            <span class="d-flex justify-content-center align-items-center gap-1">
+                <i class="bi-bar-chart"></i> <p class="mb-0"><%= post.views %></p>
+            </span>
+        </div>
+    </div>
+</div>

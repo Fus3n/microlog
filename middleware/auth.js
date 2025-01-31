@@ -15,8 +15,21 @@ const protect = async (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = await User.findById(decoded.id)
-            .select("-password -passwordResetToken -passwordResetExpires -passwordChangedAt");
+            .select("-password -passwordResetToken -passwordResetExpires -passwordChangedAt")
+            .populate({
+                path: 'notifications.originUser',
+                select: 'username'
+            })
+            .then(user => {
+                user.notifications.sort((a, b) => b.createdAt - a.createdAt);
+                return user;
+            });
         
+        // Check if all notifications are read
+        const allNotificationsRead = req.user.notifications.every(notification => notification.isRead);
+        req.notificationsAllRead = allNotificationsRead;
+
+
         next();
     } catch (error) {
         console.error(error);

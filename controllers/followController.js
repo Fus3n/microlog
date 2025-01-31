@@ -46,8 +46,8 @@ const followUser = async (req, res) => {
                 type: 'follow',
                 icon: Icons.follow,
                 title: `${user.fullName || user.username} started following you`,
-                body: `${user.fullName || user.username} started following you`,
-                originator: user._id,
+                text: `${user.fullName || user.username} started following you`,
+                originUser: user._id,
             } } }
         ).lean().exec();
 

@@ -21,8 +21,8 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     bio: {
-        type: String,
-        maxlength: 250,
+      type: String,
+      maxlength: 250,
     },
     profilePicture: {
       type: String,
@@ -35,29 +35,43 @@ const userSchema = new mongoose.Schema(
       default: 'en',
     },
     dateOfBirth: {
-        type: Date
+      type: Date
     },
     notifications: [{
-        icon: { type: String }, // icon name or url
-        title: { type: String },
-        body: { type: String, required: true },
-        isRead: { type: Boolean, default: false },
-        createdAt: { type: Date, default: Date.now },
-        type: {type: String, enum: ['like', 'comment', 'follow', 'system']},
-        originator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+      icon: { type: String }, // icon name or url
+      title: { type: String },
+      text: { type: String, required: true },
+      isRead: { type: Boolean, default: false },
+      createdAt: { type: Date, default: Date.now },
+      type: { 
+        type: String, 
+        enum: ['like', 'comment', 'follow', 'other', 'system']
+      },
+      originUser: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User', required: true
+      }, // The user the post was triggered by, if none then current user is the origin
+      originPost: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Post'
+      }, // The post the notification was triggered by
+      originComment: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Comment'
+      }, // If notification is about a specific comment
     }],
     notificationSettings: {
-        like: {type: Boolean, default: true},
-        comment: {type: Boolean, default: true},
-        follow: {type: Boolean, default: true},
-        system: {type: Boolean, default: true},
+      like: {type: Boolean, default: true},
+      comment: {type: Boolean, default: true},
+      follow: {type: Boolean, default: true},
+      other: {type: Boolean, default: true},
     },
     privacySettings: {
-        profileVisibility: {type: String, enum: ['public', 'followers', 'private'], default: 'public'},
-        postVisibility: {type: String, enum: ['public', 'followers', 'private'], default: 'public'}
+      profileVisibility: {type: String, enum: ['public', 'followers', 'private'], default: 'public'},
+      postVisibility: {type: String, enum: ['public', 'followers', 'private'], default: 'public'}
     },
     lastLogin: {
-        type: Date
+      type: Date
     },
     isActive: {
       type: Boolean,
@@ -94,17 +108,17 @@ const userSchema = new mongoose.Schema(
       default: 'user',
     },
     followers: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
     }],
     following: [{
-         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
     }],
     blockedUsers: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        default: []
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: []
     }],
   },
   {

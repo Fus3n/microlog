@@ -1,7 +1,6 @@
 const { verifyToken } = require("../controllers/authController");
 const Post = require("../models/Post");
 const { getPosts } = require("../utils/userUtils");
-const sanitize = require('sanitize-html');
 
 /**
  * 
@@ -24,7 +23,6 @@ const getFeed = async (req, res) => {
         title: 'Feed - MicroLog',
         user,
         posts,
-        sanitize
     });
 }
 

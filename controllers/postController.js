@@ -53,7 +53,7 @@ const createPost = async (req, res) => {
 
     try {
         const tags = extractHashtags(content);
-        const post = await Post.create({ text: content, user: user._id, tags });
+        const post = await Post.create({ text: sanitize(content), user: user._id, tags });
 
         // Handle profile picture upload if included
 
@@ -157,7 +157,6 @@ const getPostPage = async (req, res) => {
             title: `${post.user.username} - MicroLog`,
             post,
             user,
-            sanitize,
         });
     }
     catch (err) {

@@ -15,13 +15,20 @@
                         <h5 class="card-title mb-4">Notifications</h5>
                         <% if (user.notifications.length > 0) { %>
                             <% user.notifications.forEach(noti => { %>
-                                <div class="d-flex align-items-center mb-3">
+                                <a class="d-flex align-items-center mb-3 text-decoration-none" href="/view/notification/<%= noti?._id %>">
                                     <i class="<%= noti?.icon %> fs-4 me-3"></i>
                                     <div>
-                                        <p class="mb-0"><%= noti?.title %></p>
-                                        <small class="text-muted"><%= noti?.timestamp %></small>
+                                        <p class="mb-0 <%= noti.isRead ? 'text-muted' : '' %>"><%= noti?.title %></p>
+                                        <small class="text-muted"><%= new Date(noti?.createdAt).toLocaleString('en-US', { 
+                                            year: 'numeric',
+                                            month: 'short',
+                                            day: 'numeric',
+                                            hour: 'numeric',
+                                            minute: 'numeric',
+                                            hour12: true
+                                        }) %></small>
                                     </div>
-                                </div>
+                                </a>
                             <% }) %>
                         <% } else { %>
                             <p>You have no notifications.</p>

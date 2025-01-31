@@ -16,7 +16,7 @@ const { getLanding } = require("./controllers/landingController");
 const { getLoginPage, getRegisterPage } = require("./controllers/loginRegisterController")
 const { createPost, getPostPage } = require("./controllers/postController")
 const { followUser, unfollowUser } = require("./controllers/followController")
-const { getNotificationPage } = require("./controllers/notificationsController")
+const { getNotificationPage, viewNotification } = require("./controllers/notificationsController")
 
 const { protect } = require("./middleware/auth");
 
@@ -72,6 +72,7 @@ app.get("/explore", (req, res) => {
 // Profile Routes
 app.get("/me", protect, getMe);
 app.get("/notifications", protect, getNotificationPage)
+app.get("/view/notification/:id", protect, viewNotification)
 app.get("/me/edit", protect, profileEdit);
 app.put("/me/edit", protect, updateProfile);
 

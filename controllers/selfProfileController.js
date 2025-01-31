@@ -17,8 +17,7 @@ const getMe = async (req, res) => {
     res.render('me', {
         title: `${req.user.username} - MicroLog`,
         user: req.user,
-        posts,
-        sanitize
+        posts
     });
 };
 
@@ -45,6 +44,7 @@ const updateProfile = async (req, res) => {
         if (req.body.bio?.trim()) updates.bio = sanitize(req.body.bio.trim());
         if (req.body.location?.trim()) updates.location = sanitize(req.body.location.trim());
         if (req.body.dateOfBirth) updates.dateOfBirth = sanitize(req.body.dateOfBirth);
+
         if (req.body.profileVisibility)
             updates['privacySettings.profileVisibility'] = req.body.profileVisibility;
 
