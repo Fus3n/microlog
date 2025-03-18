@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { v2: cloudinary } = require('cloudinary');
+const { uploadToCloudinary, deleteFromCloudinary, FOLDERS } = require('../utils/cloudinaryUtils');
 
 const { verifyToken } = require("./authController");
 const { getPostWithId } = require('../utils/userUtils'); 
@@ -8,6 +8,9 @@ const { getPostWithId } = require('../utils/userUtils');
 const Post = require('../models/Post');
 const User = require('../models/User');
 const sanitize = require('sanitize-html');
+
+const { getTopLevelComments, getCommentThread } = require('../utils/commentUtils');
+
 
 /**
  * Extracts hashtags from text content
@@ -62,34 +65,14 @@ const createPost = async (req, res) => {
             const uploadedImages = [];           
 
             const { images } = req.files;
-            cloudinary.config({
-                cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-                api_key: process.env.CLOUDINARY_API_KEY,
-                api_secret: process.env.CLOUDINARY_API_SECRET,
-            });
-
-            const uploadToCloudinary = async (image) => {
-                // Upload photo to folder post_image/post_id/post_id-filename
-                const result = await cloudinary.uploader.upload(image.tempFilePath, {
-                    folder: `post_images/${post._id}`,
-                    public_id: `${post._id}-${image.name}`,
-                });
-
-                return result;  
-            }
-
             if (Array.isArray(images)) {
                 for (const image of images) {
-                    /**
-                     * @type {File}
-                     * @description The current image being processed for upload.
-                     */
                     if (!image.mimetype.startsWith('image/')) {
                         return res
                             .status(400)
                             .json({ success: false, error: 'post file type is not image' });
                     }
-                    const result = await uploadToCloudinary(image);
+                    const result = await uploadToCloudinary(FOLDERS.POST_IMAGE, post._id, image);
                     uploadedImagesRes.push(result);
                     uploadedImages.push(result.secure_url);
                 }
@@ -99,7 +82,7 @@ const createPost = async (req, res) => {
                         .status(400)
                         .json({ success: false, error: 'post file type is not image' });
                 }
-                const result = await uploadToCloudinary(images);
+                const result = await uploadToCloudinary(FOLDERS.POST_IMAGE, post._id, images);
                 uploadedImagesRes.push(result);
                 uploadedImages.push(result.secure_url);
             }
@@ -114,10 +97,10 @@ const createPost = async (req, res) => {
         });
     } catch (err) {
         console.error(err);
-        for (const image of uploadedImagesRes) {
-            cloudinary.uploader.destroy(image.public_id)
-            .then(() => console.log("Image deleted successfully"))
-            .catch((error) => console.error(error));
+        try {
+            deleteFromCloudinary(uploadedImagesRes);
+        } catch (err) {
+            console.error(err);
         }
         res.status(500).json({
             success: false,
@@ -151,12 +134,28 @@ const getPostPage = async (req, res) => {
             user = await verifyToken(token);
         }
 
-        
+        const comments = await getTopLevelComments(postId);
+
+        const viewedPosts = req.cookies.viewedPosts || {};
+        const hasViewed = viewedPosts[postId];
+
+        if (!hasViewed) {
+            post.views += 1;
+            await post.save();
+
+            // Set/update the cookie
+            viewedPosts[postId] = true; // mark this post as viewed
+            res.cookie('viewedPosts', viewedPosts, {
+                maxAge: 30 * 24 * 60 * 60 * 1000, // Expires in 30 days 
+                httpOnly: true,
+            });
+        }
 
         res.render('post', {
             title: `${post.user.username} - MicroLog`,
             post,
             user,
+            comments
         });
     }
     catch (err) {
@@ -167,13 +166,55 @@ const getPostPage = async (req, res) => {
     }
 };
 
-const likePost = async (req, res) => {};
+const getPostCommentThread = async (req, res) => {
+    try {
+        const commentId = req.params.commentId;
 
-const commmentOnPost = async (req, res) => {};
+        if (!commentId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Post ID and Comment ID are required'
+            });
+        }
+
+        const commentThread = await getCommentThread(commentId);
+        commentThread.post = await Post.findById(commentThread.post)
+            .populate('user', 'username profilePicture')
+            .lean();
+
+        if (!commentThread) {
+            return res.status(404).json({
+                success: false,
+                message: 'Comment thread not found'
+            });
+        }
+        const token = req.cookies.token;
+        let user;
+
+        if (token) {
+            user = await verifyToken(token);
+        }
+
+        const commentText = commentThread.text.length > 30 ? commentThread.text.substring(0, 27) + '...' : commentThread.text;
+
+        res.render('comment', {
+            title: `${commentText ?? 'Comment'} - MicroLog`,
+            comment: commentThread,
+            post: commentThread.post,
+            user,
+        });
+
+    } catch (error) {
+        console.error('Error fetching comment thread:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+};
+
+const likePost = async (req, res) => {};
 
 module.exports = {
     createPost,
     getPostPage,
     likePost,
-    commmentOnPost,
+    getPostCommentThread
 };

@@ -1,23 +1,27 @@
 const mongoose = require('mongoose');
 
-const postSchema = new mongoose.Schema(
+const commentSchema = new mongoose.Schema(
     {
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true,
         },
+        post: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Post',
+            required: true,
+        },
+        parentComment: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Comment',
+            default: null,
+        },
         text: {
             type: String,
+            required: true,
         },
         images: {
-            type: [String],
-            default: [],
-        },
-        title: {
-            type: String,
-        },
-        tags: {
             type: [String],
             default: [],
         },
@@ -25,13 +29,13 @@ const postSchema = new mongoose.Schema(
             type: Number,
             default: 0,
         },
-        commentsCount: {
+        repliesCount: {
             type: Number,
             default: 0,
         },
-        views: {
-            type: Number,
-            default: 0,
+        isEdited: {
+            type: Boolean,
+            default: false,
         },
         visibility: {
             type: String,
@@ -43,7 +47,7 @@ const postSchema = new mongoose.Schema(
 );
 
 // Index for efficient querying
-postSchema.index({ user: 1, createdAt: -1 });
-postSchema.index({ tags: 1 });
+commentSchema.index({ post: 1, createdAt: -1 });
+commentSchema.index({ parentComment: 1, createdAt: -1 });
 
-module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model('Comment', commentSchema); 

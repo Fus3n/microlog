@@ -6,10 +6,12 @@ const protect = async (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-        return res.status(401).json({ 
-            success: false, 
-            message: 'Not authorized' 
-        });
+        // return res.status(401).json({ 
+        //     success: false, 
+        //     message: 'Not authorized' 
+        // });
+
+        return res.redirect('/?msg=' + encodeURIComponent('not-authorized'));
     }
 
     try {
@@ -33,14 +35,10 @@ const protect = async (req, res, next) => {
         next();
     } catch (error) {
         console.error(error);
-        res.status(401).json({
-            success: false,
-            message: "Not authorized"
-        });
+        return res.redirect('/');
     }
 };
 
-// Grant access to specific roles
 const authorize = (...roles) => {
     return (req, res, next) => {
       if (!roles.includes(req.user.role)) {

@@ -6,14 +6,15 @@
     }
 %>
 
-<div id="post-card" class="card post-card mb-4 z-0" data-post-id="<%= post._id %>">
+<div class="card post-card mb-4 z-0 mb-3 comment border-0">
     <div class="card-body">
         <div class="d-flex align-items-center mb-3">
-            <img width="40" height="40" src="<%= post.user.profilePicture || '/images/default_profile.svg' %>" class="rounded-circle me-2" alt="User">
+            <img width="40" height="40" src="<%= comment.user.profilePicture || '/images/default_profile.svg' %>" class="rounded-circle me-2" alt="User">
             <div>
-                <h6 class="mb-0"><a href="/profile/<%= post.user.username || 'Anonymous' %>" class="user-link text-reset hover-underline"><%= post.user.username || 'Anonymous' %></a></h6>
+                <h6 class="mb-0"><a href="/profile/<%= comment.user.username || 'Anonymous' %>" class="user-link text-reset hover-underline"><%= comment.user.username || 'Anonymous' %></a></h6>
                 <small class="text-muted">
-                    <%= new Date(post.createdAt).toLocaleString('en-US', { 
+                    <!-- TODO: better solution for formatting date  -->
+                    <%= new Date(comment.createdAt).toLocaleString('en-US', { 
                         month: 'short', 
                         day: 'numeric',
                         hour: 'numeric',
@@ -28,31 +29,34 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="#">Save</a></li>
-                    <li><a class="dropdown-item" href="#">Report</a></li>
+                    <% if(comment.user.username !== user.username) { %>
+                        <li><a class="dropdown-item" href="#">Report</a></li>
+                    <% } %>
+                    <% if(comment.user.username === user.username) { %>
+                        <form action="/api/comments/<%= comment._id %>" method="DELETE" id="delete-comment-form" data-comment-id="<%= comment._id %>">
+                            <button type="submit" class="dropdown-item btn btn-link">Delete</button>
+                        </form>
+                    <% } %>
                 </ul>
             </div>
         </div>
 
-        <% if(post.title) { %>
-            <h5 class="card-title"><%= post.title %></h5>
-        <% } %>
+        <p class="mb-0 mt-1 mb-2"><%- formatPost(comment.text) %></p>
 
-        <p class="card-text"><%- formatPost(post.text) %></p>
-
-        <% if(post.images && post.images.length > 0) { %>
-            <% if(post.images.length === 1) { %>
+        <% if(comment.images && comment.images.length > 0) { %>
+            <% if(comment.images.length === 1) { %>
                 <div style="background-color: #000;">
-                    <img src="<%= post.images[0] %>" 
-                         class="d-block w-100 rounded" 
-                         alt="Post image"
-                         style="object-fit: contain; min-height:500px; max-height: 500px;">
+                    <img src="<%= comment.images[0] %>" 
+                        class="d-block w-100 rounded" 
+                        alt="Comment image"
+                        style="object-fit: contain; min-height:500px; max-height: 500px;">
                 </div>
             <% } else { %>
-                <div id="carousel-<%= post._id %>" class="carousel slide">
+                <div id="carousel-<%= comment._id %>" class="carousel slide">
                     <div class="carousel-indicators">
-                        <% post.images.forEach((image, index) => { %>
+                        <% comment.images.forEach((image, index) => { %>
                             <button type="button" 
-                                data-bs-target="#carousel-<%= post._id %>" 
+                                data-bs-target="#carousel-<%= comment._id %>" 
                                 data-bs-slide-to="<%= index %>"
                                 class="<%= index === 0 ? 'active' : '' %>"
                                 aria-current="<%= index === 0 ? 'true' : 'false' %>"
@@ -63,21 +67,21 @@
                     </div>
 
                     <div class="carousel-inner" style="max-height: 500px; display: flex; align-items: center;">
-                        <% post.images.forEach((image, index) => { %>
+                        <% comment.images.forEach((image, index) => { %>
                             <div class="carousel-item <%= index === 0 ? 'active' : '' %>" style="background-color: #000;">
                                 <img src="<%= image %>" 
-                                     class="d-block w-100 rounded" 
-                                     alt="Post image"
-                                     style="object-fit: contain; min-height:500px; max-height: 500px;">
+                                    class="d-block w-100 rounded" 
+                                    alt="Comment image"
+                                    style="object-fit: contain; min-height:500px; max-height: 500px;">
                             </div>
                         <% }) %>
                     </div>
 
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-<%= post._id %>" data-bs-slide="prev">
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-<%= comment._id %>" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(60%) sepia(98%) saturate(1200%) hue-rotate(199deg) brightness(100%) contrast(100%); width: 40px; height: 40px;"></span>
                         <span class="visually-hidden">Previous</span>
                     </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-<%= post._id %>" data-bs-slide="next">
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-<%= comment._id %>" data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(60%) sepia(98%) saturate(1200%) hue-rotate(199deg) brightness(100%) contrast(100%); width: 40px; height: 40px;"></span>
                         <span class="visually-hidden">Next</span>
                     </button>
@@ -85,36 +89,25 @@
             <% } %>
         <% } %>
 
-        <% if(post.tags && post.tags.length > 0) { %>
-            <div class="my-3">
-                <% post.tags.forEach(tag => { %>
-                    <a href="/tag/<%= tag %>" class="text-decoration-none me-2">#<%= tag %></a>
-                <% }) %>
-            </div>
-        <% } %>
-
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex gap-3">
+        <div class="d-flex mt-2 ml-0 justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
                 <button class="btn btn-sm">
-                    <i class="bi bi-heart"></i> <%= post.likesCount %>
-                    <!-- when liked -->
-                    <!-- <i class="bi bi-heart-fill text-danger"></i> <%= post.likesCount %> -->
+                    <i class="bi bi-heart me-1"></i> <%= comment.likesCount %>
                 </button>
-
-                <a href="/post/<%= post._id %>" class="text-reset" style="text-decoration: none;">
+                <a href="/comment/<%= comment._id %>" class="text-reset" style="text-decoration: none;">
                     <button class="btn btn-sm">
-                        <i class="bi bi-chat"></i> <%= post.commentsCount %>
+                        <i class="bi bi-chat me-1"></i> <%= comment.repliesCount %>
                     </button>
                 </a>
-                
-                <button class="btn btn-sm">
-                    <i class="bi bi-share"></i>
-                </button>
             </div>
 
+            
             <span class="d-flex justify-content-center align-items-center gap-1">
-                <i class="bi-bar-chart"></i> <p class="mb-0"><%= post.views %></p>
+                <button class="btn btn-sm">
+                    <i class="bi bi-share me-1"></i>
+                </button>
             </span>
         </div>
+    
     </div>
 </div>

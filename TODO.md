@@ -3,7 +3,7 @@
 - [ ] Feature - GIF Picker
 
 # Profile
-- [ ] Implement - Complete view profile feature
+- [x] Implement - Complete view profile feature
 - [ ] Implement - Profile picture optimization
 
 # Login/Register
@@ -16,14 +16,15 @@
 - [ ] Feature - Search with tags
 
 # Notification
-- [] Fix - Clicking on notification does not redirect to the correct page
-- [ ] Fix - Notifications are not being marked as read
-- [ ] Fix - Notifications are not being deleted
-- [ ] Fix - Notifications t
+- [x] Fix - Clicking on notification does not redirect to the correct page
+- [x] Fix - Notifications are not being marked as read
+- [x] Fix - Notifications are not being deleted
 
 # Comment
-- [ ] Implement - Comment system and model for DB
-- [ ] Implement - Reply system
+- [x] Implement - Comment system and model for DB
+- [x] Implement - Reply system
+- [ ] View Comment and thread
+- [x] Delete Comment
 - [ ] Implement - Liking comments
 - [ ] Feature - Emoji Picker
 - [ ] Feature - GIF Picker

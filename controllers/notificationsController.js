@@ -33,10 +33,19 @@ const viewNotification = async (req, res) => {
         await user.save();
         
         // decide where to redirect
-        if (notification.type === 'follow') {
-            return res.redirect(`/profile/${notification.originUser.username}`);
-        } else {
-            return res.redirect(`/feed`);
+        try {
+            if (notification.type === 'follow') {
+                return res.redirect(`/profile/${notification.originUser.username}`);
+            } else if (notification.type === 'comment') {
+                return res.redirect(`/comment/${notification.originComment._id}`);
+            } else {
+                return res.redirect(`/feed`);
+            }
+        } catch (err) {
+            res.render('404', {
+                title: '404 - Page Not Found',
+                user: req.user,
+            });
         }
     } catch (err) {
         console.error(err);

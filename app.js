@@ -14,9 +14,10 @@ const { getMe, profileEdit, updateProfile } = require("./controllers/selfProfile
 const { getPublicProfile } = require("./controllers/publicProfileController");
 const { getLanding } = require("./controllers/landingController");
 const { getLoginPage, getRegisterPage } = require("./controllers/loginRegisterController")
-const { createPost, getPostPage } = require("./controllers/postController")
+const { createPost, getPostPage, getPostCommentThread } = require("./controllers/postController")
 const { followUser, unfollowUser } = require("./controllers/followController")
 const { getNotificationPage, viewNotification } = require("./controllers/notificationsController")
+const { createComment, deleteComment, getCommentWithReplies, getPostComments, updateComment } = require("./controllers/commentController")
 
 const { protect } = require("./middleware/auth");
 
@@ -91,20 +92,30 @@ app.post("/api/unfollow", protect, unfollowUser);
 
 // API Routes for Posts
 app.post("/api/post", protect, createPost);
-app.get("/post/:id", getPostPage);
+app.get("/post/:id", protect, getPostPage);
+
+// API routes for Comments
+app.get("/comment/:commentId", protect, getPostCommentThread);
+app.post("/api/comment", protect, createComment);
+app.get("/api/comments/:postId", getPostComments);
+app.get("/api/comments/thread/:commentId", getCommentWithReplies);
+app.delete("/api/comments/:commentId", protect, deleteComment);
+app.put("/api/comments/:commentId", protect, updateComment);
 
 
 // Error Handling Middleware
 app.use((req, res, next) => {
     res.status(404).render('404', {
-        title: '404 - Page Not Found'
+        title: '404 - Page Not Found',
+        user: req.user,
     });
 });
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).render('500', {
-        title: '500 - Server Error'
+        title: '500 - Server Error',
+        user: req.user,
     });
 });
 

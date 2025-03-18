@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<%
+    function formatPost(text) {
+        return text
+            .replace(/#(\w+)/g, '<a href="/tag/$1" class="text-decoration-none">#$1</a>')
+            .replace(/\r\n|\r|\n/g, "<br>");
+    }
+%>
+
 <html lang="en" data-bs-theme="dark">
 <%- include("partials/_head") %>
 <body>
@@ -11,15 +19,46 @@
 
             <!-- Main Content -->
             <div class="col-md-6">
-                <!-- Post Content -->
-                <%- include("partials/_post-body", { post: post }) %>
+                <h5 class="card-title mb-3">Post</h5>
 
-                <!-- Comment Section -->
+                <div class="card post-card mb-4 z-0 border-0">
+                    <a href="/post/<%= post._id %>" class="text-reset text-decoration-none">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img width="40" height="40" src="<%= post.user.profilePicture || '/images/default_profile.svg' %>" class="rounded-circle me-2" alt="User">
+                                <div>
+                                    <h6 class="mb-0" class="user-link text-reset hover-underline"><%= post.user.username || 'Anonymous' %></h6>
+                                    <small class="text-muted">
+                                        <%= new Date(post.createdAt).toLocaleString('en-US', { 
+                                            month: 'short', 
+                                            day: 'numeric',
+                                            hour: 'numeric',
+                                            minute: 'numeric',
+                                            hour12: true
+                                        }) %>
+                                    </small>
+                                </div>
+                            </div>
+    
+                            <p class="card-text" style="max-height: 100px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-box-orient: vertical;">
+                                <%- formatPost(post.text) %>
+                            </p>
+                        </div>
+                    </a>
+                    <div class="fade-out-effect" style="pointer-events: none;"></div>
+                </div>
+                
+                
+                <div class="vr mx-auto" style="width: 2px; height: 20px;"></div>
+                <!-- Comment Content -->
+                <%- include("partials/_comment_body", { comment }) %>
+
+                <!-- Reply Section -->
                 <div class="card post-card mb-4 z-0">
                     <div class="card-body">
-                        <h5 class="card-title mb-3">Comments</h5>
+                        <h5 class="card-title mb-3">Replies</h5>
 
-                        <!-- Comment Input -->
+                        <!-- Reply Input -->
                         <form id="commentForm" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <textarea class="form-control" rows="2" placeholder="Add a comment..."></textarea>
@@ -44,9 +83,9 @@
                             </div>
                         </form>
 
-                        <!-- Comments -->
+                        <!-- Replies -->
                         <div class="mt-4 comments-container">
-                            <% if (comments && comments.length > 0) { %>
+                            <% if (comment.replies && comment.replies.length > 0) { %>
                                 <% comments.forEach(comment => { %>
                                     <%- include("partials/_comment_body", { comment }) %>
                                 <% }); %>

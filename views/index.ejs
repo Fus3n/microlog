@@ -37,6 +37,13 @@
                     </div>
                 </div>
             </div>
+
+        <% if (message) { %>
+            <script>
+                alert('<%= message %>');
+                window.history.replaceState({}, document.title, window.location.pathname);
+            </script>
+        <% } %>
         </div>
     </body>
 </html>
